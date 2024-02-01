@@ -22,8 +22,15 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_LEFT] and self.rect.left > 40:
             self.rect.x -= min(SPEED, self.rect.left - 40)
 
+    def collision(self):
+        if pygame.sprite.spritecollide(self, enemies, True):
+            remove_all_sprites()
+            global GAMESTATE
+            GAMESTATE = 2
+
     def update(self, *args, **kwargs):
         self.player_input()
+        self.collision()
 
 
 class Star:
@@ -66,27 +73,67 @@ class Bullet(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/bullet/bullet.webp").convert_alpha()
         self.rect = self.image.get_rect(midbottom=midbottom)
 
+    def collision(self):
+        if pygame.sprite.spritecollide(self, enemies, True) or self.rect.top <= 0:
+            self.kill()
+            if len(enemies) == 0:
+                remove_all_sprites()
+                global GAMESTATE
+                GAMESTATE = 3
+
     def update(self, *args, **kwargs):
         self.rect.y -= 1.5
+        self.collision()
+
+
+def start():
+    global player
+    player = pygame.sprite.GroupSingle()
+    player.add(Player())
+
+    global enemies
+    enemies = pygame.sprite.Group()
+    for y in range(20, 381, 120):
+        for x in range(40, SCREENSIZE[0] - 76 - 39, 86):
+            enemies.add(Enemy(x, y))
+
+    global bullets
+    bullets = pygame.sprite.Group()
+
+
+def remove_all_sprites():
+    player.empty()
+    enemies.empty()
+    bullets.empty()
 
 
 pygame.init()
+pygame.font.init()
 screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Space game")
 clock = pygame.time.Clock()
 
+logo = pygame.image.load("assets/logo.webp").convert_alpha()
+logorect = logo.get_rect(topleft=(80, 200))
+start_btn = pygame.image.load("assets/start.png").convert_alpha()
+start_btn_rect = start_btn.get_rect(center=(SCREENSIZE[0] // 2, 600))
 
-player = pygame.sprite.GroupSingle()
-player.add(Player())
+LARGE_FONT = pygame.font.Font("assets/Sixtyfour-Regular.ttf", 40)
+gameover_text = LARGE_FONT.render("Game over!", True, (255, 255, 255))
+gameover_rect = gameover_text.get_rect(center=(SCREENSIZE[0] // 2, 300))
 
-enemies = pygame.sprite.Group()
-for y in range(20, 381, 120):
-    for x in range(40, SCREENSIZE[0] - 76 - 39, 86):
-        enemies.add(Enemy(x, y))
+win_text = LARGE_FONT.render("You won!", True, (255, 255, 255))
+win_rect = win_text.get_rect(center=(SCREENSIZE[0] // 2, 300))
+
+
+GAMESTATE = 0
+# 0 = startscreen
+# 1 = game
+# 2 = game over
+# 3 = win
 
 stars = [Star() for _ in range(500)]
 
-bullets = pygame.sprite.Group()
 
 
 while True:
@@ -94,10 +141,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bullets.add(Bullet(player.sprite.rect.midtop))
-                print("shoot")
+
+        if GAMESTATE in (0, 2, 3):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and start_btn_rect.collidepoint(pygame.mouse.get_pos()):
+                GAMESTATE = 1
+                start()
+        elif GAMESTATE == 1:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if len(bullets) == 0:
+                        bullets.add(Bullet(player.sprite.rect.midtop))
 
     screen.fill((0, 0, 0))
 
@@ -105,15 +158,24 @@ while True:
         pygame.draw.circle(screen, (star.color, star.color, star.color), (star.x, star.y), star.radius)
         star.update()
 
-    enemies.update()
-    enemies.draw(screen)
+    if GAMESTATE == 0:
+        screen.blit(logo, logorect)
+        screen.blit(start_btn, start_btn_rect)
+    elif GAMESTATE == 1:
+        enemies.update()
+        enemies.draw(screen)
 
-    bullets.update()
-    bullets.draw(screen)
+        bullets.update()
+        bullets.draw(screen)
 
-    player.update()
-    player.draw(screen)
+        player.update()
+        player.draw(screen)
+    elif GAMESTATE == 2:
+        screen.blit(gameover_text, gameover_rect)
+        screen.blit(start_btn, start_btn_rect)
+    elif GAMESTATE == 3:
+        screen.blit(win_text, win_rect)
+        screen.blit(start_btn, start_btn_rect)
+
     pygame.display.update()
-
-
     clock.tick(60)
