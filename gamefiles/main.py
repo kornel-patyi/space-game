@@ -45,6 +45,31 @@ class Star:
             self.y = -10
 
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        image = pygame.image.load("assets/enemy/1/enemy1.webp").convert_alpha()
+        image = pygame.transform.flip(image, False, True)
+        self.image = pygame.transform.smoothscale(image, (76, 120))
+        self.rect = self.image.get_frect(topleft=(x, y))
+
+    def update(self, *args, **kwargs):
+        self.rect.y += 0.2
+
+    def move(self):
+        pass
+
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, midbottom):
+        super().__init__()
+        self.image = pygame.image.load("assets/bullet/bullet.webp").convert_alpha()
+        self.rect = self.image.get_rect(midbottom=midbottom)
+
+    def update(self, *args, **kwargs):
+        self.rect.y -= 1.5
+
+
 pygame.init()
 screen = pygame.display.set_mode(SCREENSIZE)
 pygame.display.set_caption("Space game")
@@ -54,8 +79,14 @@ clock = pygame.time.Clock()
 player = pygame.sprite.GroupSingle()
 player.add(Player())
 
+enemies = pygame.sprite.Group()
+for y in range(20, 381, 120):
+    for x in range(40, SCREENSIZE[0] - 76 - 39, 86):
+        enemies.add(Enemy(x, y))
 
 stars = [Star() for _ in range(500)]
+
+bullets = pygame.sprite.Group()
 
 
 while True:
@@ -65,6 +96,7 @@ while True:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                bullets.add(Bullet(player.sprite.rect.midtop))
                 print("shoot")
 
     screen.fill((0, 0, 0))
@@ -73,8 +105,15 @@ while True:
         pygame.draw.circle(screen, (star.color, star.color, star.color), (star.x, star.y), star.radius)
         star.update()
 
+    enemies.update()
+    enemies.draw(screen)
+
+    bullets.update()
+    bullets.draw(screen)
+
     player.update()
     player.draw(screen)
     pygame.display.update()
+
 
     clock.tick(60)

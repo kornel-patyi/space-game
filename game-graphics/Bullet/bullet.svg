@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg2870"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="bullet.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2872"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.4770342"
+     inkscape:cx="213.60372"
+     inkscape:cy="351.37981"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2867">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3435">
+      <stop
+         style="stop-color:#07fbff;stop-opacity:0;"
+         offset="0"
+         id="stop3431" />
+      <stop
+         style="stop-color:#06fbff;stop-opacity:1;"
+         offset="0.5"
+         id="stop3441" />
+      <stop
+         style="stop-color:#05fbff;stop-opacity:0;"
+         offset="1"
+         id="stop3439" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3435"
+       id="linearGradient3437"
+       x1="55.172497"
+       y1="94.939688"
+       x2="73.443909"
+       y2="94.939688"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.49019609,0,0,1,28.127154,0)" />
+  </defs>
+  <g
+     inkscape:label="Réteg 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:url(#linearGradient3437);fill-opacity:1;stroke-width:0.185245"
+       id="rect2926"
+       width="8.9565744"
+       height="60.904705"
+       x="55.172497"
+       y="64.487335"
+       inkscape:export-filename="bullet.png"
+       inkscape:export-xdpi="12.51"
+       inkscape:export-ydpi="12.51" />
+  </g>
+</svg>
